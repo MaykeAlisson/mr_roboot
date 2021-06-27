@@ -1,19 +1,29 @@
 #!/usr/bin/env python3
-import time
-import telegram
 from decouple import config
-from telegram.ext import Updater, CommandHandler
-
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from handler import listener, start, argument
 
 ############################### ENV ############################################
 TOKEN = config('TELEGRAN_TOKEN')
-USER = config('TELEGRAN_USER')
-
 
 ############################### Bot ############################################
 
-bot = telegram.Bot(TOKEN)
+updater = Updater(token=TOKEN, use_context=True)
 
+dispatcher = updater.dispatcher
+
+# Escuta text menos oque e comand
+listener_handler = MessageHandler(Filters.text & (~Filters.command), listener)
+dispatcher.add_handler(listener_handler)
+# Escuta o comando start
+start_handler = CommandHandler('start', start)
+dispatcher.add_handler(start_handler)
+# Escuta o comando argument e recebe argumento
+argument_handler = CommandHandler('argument', argument)
+dispatcher.add_handler(argument_handler)
+
+
+updater.start_polling()
 # def handle(message):
 #     print(message)
 #     origin = message['chat']
