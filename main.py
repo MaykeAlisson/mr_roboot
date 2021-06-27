@@ -33,12 +33,22 @@ def on_callback_query(message):
             return bot.sendMessage(USER, second_menu_message(), reply_markup=second_menu_keyboard())
         elif value == 'out':
             return bot.sendMessage(USER, third_menu_message(), reply_markup=third_menu_keyboard())
-        else:
-            return print("option invalid")
+
+    def optionsFinance(value):
+        pass
+
+    def optionsDevelop(value):
+        pass
+
+    def optionsOuthers(value):
+        pass
 
     print('Callback Query:', query_id, from_id, query_data)
 
     option(query_data)
+    optionsFinance(query_data)
+    optionsDevelop(query_data)
+    optionsOuthers(query_data)
 
     # bot.answerCallbackQuery(query_id, text='Got it')
 
@@ -57,7 +67,7 @@ def main_menu_keyboard():
 
 def first_menu_keyboard():
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Submenu 2-1', callback_data='fin_1')],
+        [InlineKeyboardButton(text='Price', callback_data='fin_1')],
         [InlineKeyboardButton(text='Submenu 2-2', callback_data='fin_2')],
         [InlineKeyboardButton(text='Menu principal', callback_data='main')]
     ])
@@ -67,7 +77,7 @@ def first_menu_keyboard():
 def second_menu_keyboard():
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Ip', callback_data='dev_1')],
-        [InlineKeyboardButton(text='Armazenamento', callback_data='dev_2')],
+        [InlineKeyboardButton(text='Storage', callback_data='dev_2')],
         [InlineKeyboardButton(text='Retornar menu', callback_data='main')]
     ])
     return keyboard
