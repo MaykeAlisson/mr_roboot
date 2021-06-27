@@ -20,3 +20,7 @@ def start(update, context):
 def argument(update, context):
     arg = context.args
     context.bot.send_message(chat_id=USER, text=arg)
+
+
+def unknown(update, context):
+    context.bot.send_message(chat_id=USER, text='Desculpe comando não reconhecido!')

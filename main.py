@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from decouple import config
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from handler import listener, start, argument
+from handler import listener, start, argument, unknown
 
 ############################### ENV ############################################
 TOKEN = config('TELEGRAN_TOKEN')
@@ -21,6 +21,9 @@ dispatcher.add_handler(start_handler)
 # Escuta o comando argument e recebe argumento
 argument_handler = CommandHandler('argument', argument)
 dispatcher.add_handler(argument_handler)
+# se não encontrar comando correspondente
+unknown_handler = MessageHandler(Filters.command, unknown)
+dispatcher.add_handler(unknown_handler)
 
 
 updater.start_polling()
