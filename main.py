@@ -78,40 +78,13 @@ def menu_title():
 
 
 def listener_finance(update, context):
-    print(update)
-    print(context)
+    query = update.callback_query.data
+    print(query)
 
 
 def listener_develop(update, context):
-    print(update)
-    print(context)
-
-
-# def first_menu_keyboard():
-#     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-#         [InlineKeyboardButton(text='Price', callback_data='fin_1')],
-#         [InlineKeyboardButton(text='Submenu 2-2', callback_data='fin_2')],
-#         [InlineKeyboardButton(text='Menu principal', callback_data='main')]
-#     ])
-#     return keyboard
-#
-#
-# def second_menu_keyboard():
-#     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-#         [InlineKeyboardButton(text='Ip', callback_data='dev_1')],
-#         [InlineKeyboardButton(text='Storage', callback_data='dev_2')],
-#         [InlineKeyboardButton(text='Retornar menu', callback_data='main')]
-#     ])
-#     return keyboard
-#
-#
-# def third_menu_keyboard():
-#     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-#         [InlineKeyboardButton(text='Submenu 3-1', callback_data='out_1')],
-#         [InlineKeyboardButton(text='Submenu 3-2', callback_data='out_2')],
-#         [InlineKeyboardButton(text='Menu principal', callback_data='main')]
-#     ])
-#     return keyboard
+    query = update.callback_query.data
+    print(query)
 
 
 # Escuta text menos oque e comand
