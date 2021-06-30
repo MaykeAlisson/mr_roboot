@@ -107,3 +107,5 @@ updater.dispatcher.add_handler(CallbackQueryHandler(listener_finance, pattern='s
 updater.dispatcher.add_handler(CallbackQueryHandler(listener_develop, pattern='sub_dev_*'))
 
 updater.start_polling()
+
+# run forever https://stackoverflow.com/questions/19571282/using-forever-js-with-python/19571283
