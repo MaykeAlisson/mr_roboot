@@ -8,4 +8,5 @@ def get_ip():
 
 
 def get_storage():
-    return os.popen('df -h')
+    storage = os.popen('df -h').read().strip()
+    return storage

@@ -79,7 +79,7 @@ def others_menu(update, context):
     global menu
     menu = 'Others'
     context.bot.send_message(chat_id=USER, text=menu_title(), reply_markup=others_menu_keyboard())
-    
+
 
 def menu_title():
     return 'Menu {0}:'.format(menu)
@@ -101,6 +101,7 @@ def listener_develop(update, context):
         return
     if str(query) == 'sub_dev_2':
         storage = get_storage()
+        print(storage)
         context.bot.send_message(chat_id=USER, text=storage)
         return
 
