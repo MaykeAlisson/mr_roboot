@@ -79,8 +79,7 @@ def others_menu(update, context):
     global menu
     menu = 'Others'
     context.bot.send_message(chat_id=USER, text=menu_title(), reply_markup=others_menu_keyboard())
-    # return context.bot.send_message(chat_id=USER, text='Em Breve!')
-
+    
 
 def menu_title():
     return 'Menu {0}:'.format(menu)
@@ -97,10 +96,12 @@ def listener_develop(update, context):
     query = update.callback_query.data
     print(query)
     if str(query) == 'sub_dev_1':
-        print('seu ip: ', get_ip())
+        ip = get_ip()
+        context.bot.answer_callback_query(update.callback_query.id, text='Seu ip e {0} ou mayke.mooo.com'.format(ip))
         return
     if str(query) == 'sub_dev_2':
-        print('seu storage: ', get_storage())
+        storage = get_storage()
+        context.bot.send_message(chat_id=USER, text=storage)
         return
 
 
