@@ -22,10 +22,6 @@ def listener(update, context):
     context.bot.send_message(chat_id=USER, text=menu_title(), reply_markup=main_menu_keyboard())
 
 
-def start(update, context):
-    context.bot.send_message(chat_id=USER, text='ola mundo /start')
-
-
 def argument(update, context):
     arg = context.args
     context.bot.send_message(chat_id=USER, text=arg)

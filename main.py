@@ -2,7 +2,7 @@
 from decouple import config
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
-from handler import listener, start, argument, unknown, finance_menu, develop_menu, others_menu, listener_finance, \
+from handler import listener, argument, unknown, finance_menu, develop_menu, others_menu, listener_finance, \
     listener_develop, listener_others
 
 ############################### ENV ############################################
@@ -17,9 +17,6 @@ dispatcher = updater.dispatcher
 # Escuta text menos oque e comand
 listener_handler = MessageHandler(Filters.text & (~Filters.command), listener)
 dispatcher.add_handler(listener_handler)
-# Escuta o comando start
-start_handler = CommandHandler('start', start)
-dispatcher.add_handler(start_handler)
 # Escuta o comando argument e recebe argumento
 argument_handler = CommandHandler('argument', argument)
 dispatcher.add_handler(argument_handler)
