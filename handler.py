@@ -1,11 +1,12 @@
 from decouple import config
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
 from develop import get_ip, get_storage
-from finance import get_price
+from finance import get_price, get_news
 
 ############################### ENV ############################################
 USER = config('TELEGRAN_USER')
-
+TOKEN_GOOGLE = config('TOKEN_GOOGLE_NEWS')
 
 ############################### VAR ############################################
 menu = ''
@@ -90,7 +91,8 @@ def listener_finance(update, context):
         context.bot.send_message(chat_id=USER, text=price)
         return
     if str(query) == 'sub_fin_2':
-        context.bot.send_message(chat_id=USER, text='Em breve!')
+        get_news(TOKEN_GOOGLE)
+        context.bot.sendDocument(chat_id=USER, document='./finance.html')
         return
 
 
