@@ -85,23 +85,27 @@ def menu_title():
 
 def listener_finance(update, context):
     query = update.callback_query.data
-    print(query)
+    if str(query) == 'sub_fin_1':
+        price = get_price()
+        context.bot.send_message(chat_id=USER, text=price)
+        return
+    if str(query) == 'sub_fin_2':
+        context.bot.send_message(chat_id=USER, text='Em breve!')
+        return
 
 
 def listener_develop(update, context):
     query = update.callback_query.data
-    print(query)
     if str(query) == 'sub_dev_1':
         ip = get_ip()
         context.bot.answer_callback_query(update.callback_query.id, text='Seu ip e {0} ou mayke.mooo.com'.format(ip))
         return
     if str(query) == 'sub_dev_2':
         storage = get_storage()
-        print(storage)
         context.bot.send_message(chat_id=USER, text=storage)
         return
 
 
 def listener_others(update, context):
     query = update.callback_query.data
-    print(query)
+    context.bot.send_message(chat_id=USER, text='Em breve!')
