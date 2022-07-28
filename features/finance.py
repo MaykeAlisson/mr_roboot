@@ -1,7 +1,7 @@
 import requests
 from datetime import date
 
-from newsapi import NewsApiClient
+# from newsapi import NewsApiClient
 
 
 def get_price():
@@ -30,7 +30,7 @@ def get_price():
 
     return 'Erro ao buscar informações!'
 
-
+"""
 def get_news(token):
     newsapi = NewsApiClient(api_key=token)
 
@@ -74,6 +74,8 @@ def get_news(token):
             '''.format(noticia['title'], noticia['url'], noticia['source']['name'])
             body += str(ul)
 
-        arq_html = open('finance.html', 'w')
+        arq_html = open('../finance.html', 'w')
         arq_html.write(get_html(title, body))
         arq_html.close()
+"""
+

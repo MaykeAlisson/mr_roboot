@@ -1,5 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
 from decouple import config
+import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
 from handler import listener, argument, unknown, finance_menu, develop_menu, others_menu, listener_finance, \
@@ -10,6 +12,11 @@ TOKEN = config('TELEGRAN_TOKEN')
 
 
 ############################### Bot ############################################
+
+# Enable logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 
 updater = Updater(token=TOKEN, use_context=True)
 
@@ -35,3 +42,7 @@ updater.dispatcher.add_handler(CallbackQueryHandler(listener_others, pattern='su
 updater.start_polling()
 
 # run forever https://stackoverflow.com/questions/19571282/using-forever-js-with-python/19571283
+
+#novos modelos
+# https://github.com/mateustoin/Bittoin-Telegram-Bot
+# https://www.udemy.com/course/como-criar-robo-de-vendas-no-telegram-com-python/

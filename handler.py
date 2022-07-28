@@ -1,8 +1,8 @@
 from decouple import config
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from develop import get_ip, get_storage
-from finance import get_price, get_news
+from features.develop import get_ip, get_storage
+from features.finance import get_price
 
 ############################### ENV ############################################
 USER = config('TELEGRAN_USER')
