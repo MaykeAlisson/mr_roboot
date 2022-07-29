@@ -1,81 +1,82 @@
 import requests
-from datetime import date
-
-# from newsapi import NewsApiClient
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-def get_price():
-    res = requests.get('https://api.hgbrasil.com/finance?key=${env.keyHg}')
-    if res.status_code == 200:
-        modedas = res.json()['results']['currencies']
-        dolar = modedas['USD']['buy']
-        dolar_vari = modedas['USD']['variation']
-        euro = modedas['EUR']['buy']
-        euro_vari = modedas['EUR']['variation']
-        bitcoin = modedas['BTC']['buy']
-        bitcoin_vari = modedas['BTC']['variation']
-        stocks = res.json()['results']['stocks']
-        ibov = stocks['IBOVESPA']['points']
-        ibov_vari = stocks['IBOVESPA']['variation']
-        nasdaq = stocks['NASDAQ']['points']
-        nasdaq_vari = stocks['NASDAQ']['variation']
+def get_price(url):
+    req_bored = requests.get(url)
 
-        message = 'Dolar: {0} variação {1}\n' \
-                  'Euro: {2} variação {3}\n' \
-                  'Bitcoin: {4} variação {5}\n' \
-                  'Ibovespa: {6} variação {7}\n' \
-                  'Nasdaq: {8} variação {9}\n'.format(dolar, dolar_vari, euro, euro_vari, bitcoin, bitcoin_vari, ibov,
-                                                      ibov_vari, nasdaq, nasdaq_vari)
-        return message
+    if req_bored.status_code != 200:
+        return 'Requisição falhou, tente novamente!'
 
-    return 'Erro ao buscar informações!'
+    modedas = req_bored.json()['results']['currencies']
+    dolar = modedas['USD']['buy']
+    dolar_vari = modedas['USD']['variation']
+    euro = modedas['EUR']['buy']
+    euro_vari = modedas['EUR']['variation']
+    bitcoin = modedas['BTC']['buy']
+    bitcoin_vari = modedas['BTC']['variation']
+    stocks = req_bored.json()['results']['stocks']
+    ibov = stocks['IBOVESPA']['points']
+    ibov_vari = stocks['IBOVESPA']['variation']
+    nasdaq = stocks['NASDAQ']['points']
+    nasdaq_vari = stocks['NASDAQ']['variation']
 
-"""
-def get_news(token):
-    newsapi = NewsApiClient(api_key=token)
+    message = 'Dolar: {0} variação {1}\n' \
+              'Euro: {2} variação {3}\n' \
+              'Bitcoin: {4} variação {5}\n' \
+              'Ibovespa: {6} variação {7}\n' \
+              'Nasdaq: {8} variação {9}\n'.format(dolar, dolar_vari, euro, euro_vari, bitcoin, bitcoin_vari, ibov,
+                                                  ibov_vari, nasdaq, nasdaq_vari)
+    return message
 
-    top_headlines = newsapi.get_top_headlines(category='business',
-                                              language='pt')
 
-    status = top_headlines['status']
+def get_news():
+    return 'Em breve!'
 
-    def get_html(title, body):
-        codigo_html = '''
-        <html>
-        <head>
-        <title>News Finance</title>
-        </head>
-        <body>
-        <center>
-            <h1>{0}</h1>
-            {1}       
-        </center>
-        </body>
-        </html>
-        '''.format(title, body)
-        return codigo_html
 
-    if status == 'ok':
-        data_base = date.today().strftime("%m/%d/%y")
-        noticias = top_headlines['articles']
-        title = 'News Finance {}'.format(data_base)
-        body = ''
-        for noticia in noticias:
-            ul = '''
-            <ul>
-            <p style="font-weight: bold; font-size: large; " ><span>{0}</span></p>
-            <p style="font-weight: bold; margin: -10 !important;">
-            <span>
-            <a href="{1}"  style="text-decoration:none; color: #2E8B57;" >Saiba Mais</a>
-            </span>
-            </p>
-            <p><span>Fonte: {2}</span></p>
-            </ul>
-            '''.format(noticia['title'], noticia['url'], noticia['source']['name'])
-            body += str(ul)
+class Finance(object):
 
-        arq_html = open('../finance.html', 'w')
-        arq_html.write(get_html(title, body))
-        arq_html.close()
-"""
+    def __init__(self):
+        """[Resumo]
+        Método construtor define valores globais.
+        """
+        self.url_base_hgb = 'https://api.hgbrasil.com/finance?key=${env.keyHg}'
 
+        self.original_actions = ["price", "news"]
+
+    def finance(self, update, context):
+        """[Resumo]
+        Função executada quando o comando '/finance' é utilizado no chat do telegram.
+        """
+
+        # Lista com as atividades para exibir nos botões
+        actions = self.original_actions
+
+        # Cria botões e define valor de callback para quando forem clicados
+        keyboard = [[InlineKeyboardButton(actions[0], callback_data='0'),
+                     InlineKeyboardButton(actions[1], callback_data='1')]]
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        # Aciona botões com mensagem para escolher atividade
+        update.message.reply_text('Por favor escolha um tipo de atividade:', reply_markup=reply_markup)
+
+    def button(self, update, context):
+        """[Resumo]
+        Função acionada quando o botão é clicado.
+        """
+        query = update.callback_query
+
+        # CallbackQueries need to be answered, even if no notification to the user is needed
+        query.answer()
+
+        def case_options(argument):
+            switcher = {
+                0: get_price(self.url_base_hgb),
+                1: get_news()
+            }
+            return switcher.get(argument, "option not exist")
+
+        result = case_options(int(query.data))
+
+        query.edit_message_text(text=result)

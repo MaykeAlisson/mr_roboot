@@ -1,5 +1,9 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from decouple import config
+from features.finance import Finance
+from features.unknow import Unknow
+from features.develop import Develop
+from features.others import Others
 import logging
 
 # Importa variavel de ambiente token
@@ -9,7 +13,13 @@ USER = config('TELEGRAN_USER')
 
 # Define padrão de log
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                     level=logging.INFO)
+                    level=logging.INFO)
+
+
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text=comands)
+
 
 class Bot(object):
     """[Resumo]
@@ -19,10 +29,10 @@ class Bot(object):
     """
 
     global comands
-    comands = 'Bem vindo!\nEstes são os comandos disponiveis:\n/develop funções dev\n'\
-              '/finance funções financeira\n'\
-              '/news funções noticias\n'\
-              '/outher funções utilitarias'
+    comands = 'Bem vindo!\nEstes são os comandos disponiveis:\n/develop funções dev\n' \
+              '/finance funções financeira\n' \
+              '/news funções noticias\n' \
+              '/others funções utilitarias'
 
     def __init__(self):
         """[Resumo]
@@ -35,49 +45,51 @@ class Bot(object):
         self.updater = Updater(token=bot_token, use_context=True)
         self.dispatcher = self.updater.dispatcher
 
-        # self.pokedex = Pokedex()
-        # self.url_short = Urlshort()
-        # self.bored = Bored()
+        self.finance = Finance()
+        self.develop = Develop()
+        self.others = Others()
+        self.unknown = Unknow()
 
     def run(self):
         """[Resumo]
         Função cria todos os comandos do bot, são jogados no dispatcher e depois inicializado.
         """
-        # Comandos básicos do bot
-        # start_handler = CommandHandler('start', self.start)
 
         # Escuta texto que não seja comando
-        listener_handler = MessageHandler(Filters.text & (~Filters.command), self.start)
+        listener_handler = MessageHandler(Filters.text & (~Filters.command), start)
 
+        # Comando finance
+        finance_handler = CommandHandler('finance', self.finance.finance)
+        finance_callback = CallbackQueryHandler(self.finance.button)
 
-        # Comandos da pokédex
-        # pokedex_handler = CommandHandler('pokedex', self.pokedex.pokedex)
-        # habilidades_handler = CommandHandler('habilidades', self.pokedex.habilidades)
-        # moves_handler = CommandHandler('moves', self.pokedex.moves)
+        # Comando develop
+        develop_handler = CommandHandler('develop', self.develop.develop)
+        develop_callback = CallbackQueryHandler(self.develop.button)
 
-        # Comandos do encurtador de URL
-        # url_handler = CommandHandler('url', self.url_short.url)
+        # Comandos do others
+        others_handler = CommandHandler('others', self.others.others)
+        url_handler = CommandHandler('url', self.others.url)
 
-        # Comandos do desentediador
-        # bored_handler = CommandHandler('bored', self.bored.bored)
-        # button_callback = CallbackQueryHandler(self.bored.button)
-        # participantes_handler = CommandHandler('participantes', self.bored.participantes)
+        # Comandos unknown
+        unknown_handler = MessageHandler(Filters.command, self.unknown.unknow)
 
         # Dispatchers do bot
         self.dispatcher.add_handler(listener_handler)
 
-        # Dispatchers da pokédex
-        # self.dispatcher.add_handler(pokedex_handler)
-        # self.dispatcher.add_handler(habilidades_handler)
-        # self.dispatcher.add_handler(moves_handler)
+        # Dispatchers da finances
+        self.dispatcher.add_handler(finance_handler)
+        self.dispatcher.add_handler(finance_callback)
 
-        # Dispatchers do encurtador de URL
-        # self.dispatcher.add_handler(url_handler)
+        # Dispatchers da develop
+        self.dispatcher.add_handler(develop_handler)
+        self.dispatcher.add_handler(develop_callback)
 
-        # Dispatchers do desentediador
-        # self.dispatcher.add_handler(bored_handler)
-        # self.dispatcher.add_handler(button_callback)
-        # self.dispatcher.add_handler(participantes_handler)
+        # Dispatchers da others
+        self.dispatcher.add_handler(others_handler)
+        self.dispatcher.add_handler(url_handler)
+
+        # Dispatchers do unknown
+        self.dispatcher.add_handler(unknown_handler)
 
         # Inicia a execução do bot
         self.updater.start_polling()
@@ -88,13 +100,3 @@ class Bot(object):
     '''
         IMPLEMENTAÇÃO DOS COMANDOS BÁSICOS DO BOT
     '''
-
-    def start(self, update, context):
-        origin = update['message']['chat']
-        if str(update.effective_chat.id) != USER:
-            context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text='Sinto muito {0}\nmas eu só falo com meu mestre!'.format(origin['first_name']))
-            return
-
-        context.bot.send_message(chat_id=USER,
-                                 text=comands)
