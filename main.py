@@ -1,48 +1,57 @@
-#!/usr/bin/env python
+# #!/usr/bin/env python
+#
+# from decouple import config
+# import logging
+# from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+#
+# from handler import listener, argument, unknown, finance_menu, develop_menu, others_menu, listener_finance, \
+#     listener_develop, listener_others
+#
+# ############################### ENV ############################################
+# TOKEN = config('TELEGRAN_TOKEN')
+#
+#
+# ############################### Bot ############################################
+#
+# # Enable logging
+# logging.basicConfig(
+#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+# )
+#
+# updater = Updater(token=TOKEN, use_context=True)
+#
+# dispatcher = updater.dispatcher
+#
+# # Escuta text menos oque e comand
+# listener_handler = MessageHandler(Filters.text & (~Filters.command), listener)
+# dispatcher.add_handler(listener_handler)
+# # Escuta o comando argument e recebe argumento
+# argument_handler = CommandHandler('argument', argument)
+# dispatcher.add_handler(argument_handler)
+# # se não encontrar comando correspondente
+# unknown_handler = MessageHandler(Filters.command, unknown)
+# dispatcher.add_handler(unknown_handler)
+#
+# updater.dispatcher.add_handler(CallbackQueryHandler(finance_menu, pattern='fin'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(develop_menu, pattern='dev'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(others_menu, pattern='out'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(listener_finance, pattern='sub_fin_*'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(listener_develop, pattern='sub_dev_*'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(listener_others, pattern='sub_out_*'))
+#
+# updater.start_polling()
+#
+# # run forever https://stackoverflow.com/questions/19571282/using-forever-js-with-python/19571283
+#
+# #novos modelos
+# # https://github.com/mateustoin/Bittoin-Telegram-Bot
+# # https://www.udemy.com/course/como-criar-robo-de-vendas-no-telegram-com-python/
 
-from decouple import config
-import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+from mr_roboot import Bot
 
-from handler import listener, argument, unknown, finance_menu, develop_menu, others_menu, listener_finance, \
-    listener_develop, listener_others
+def main():
+    bot = Bot()
+    bot.run()
 
-############################### ENV ############################################
-TOKEN = config('TELEGRAN_TOKEN')
-
-
-############################### Bot ############################################
-
-# Enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
-
-updater = Updater(token=TOKEN, use_context=True)
-
-dispatcher = updater.dispatcher
-
-# Escuta text menos oque e comand
-listener_handler = MessageHandler(Filters.text & (~Filters.command), listener)
-dispatcher.add_handler(listener_handler)
-# Escuta o comando argument e recebe argumento
-argument_handler = CommandHandler('argument', argument)
-dispatcher.add_handler(argument_handler)
-# se não encontrar comando correspondente
-unknown_handler = MessageHandler(Filters.command, unknown)
-dispatcher.add_handler(unknown_handler)
-
-updater.dispatcher.add_handler(CallbackQueryHandler(finance_menu, pattern='fin'))
-updater.dispatcher.add_handler(CallbackQueryHandler(develop_menu, pattern='dev'))
-updater.dispatcher.add_handler(CallbackQueryHandler(others_menu, pattern='out'))
-updater.dispatcher.add_handler(CallbackQueryHandler(listener_finance, pattern='sub_fin_*'))
-updater.dispatcher.add_handler(CallbackQueryHandler(listener_develop, pattern='sub_dev_*'))
-updater.dispatcher.add_handler(CallbackQueryHandler(listener_others, pattern='sub_out_*'))
-
-updater.start_polling()
-
-# run forever https://stackoverflow.com/questions/19571282/using-forever-js-with-python/19571283
-
-#novos modelos
-# https://github.com/mateustoin/Bittoin-Telegram-Bot
-# https://www.udemy.com/course/como-criar-robo-de-vendas-no-telegram-com-python/
+if __name__ == "__main__":
+    main()
