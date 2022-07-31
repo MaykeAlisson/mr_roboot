@@ -4,6 +4,7 @@ from features.finance import Finance
 from features.unknow import Unknow
 from features.develop import Develop
 from features.others import Others
+from features.callback import Callback
 import logging
 
 # Importa variavel de ambiente token
@@ -29,9 +30,9 @@ class Bot(object):
     """
 
     global comands
-    comands = 'Bem vindo!\nEstes são os comandos disponiveis:\n/develop funções dev\n' \
+    comands = 'Bem vindo!\nEstes são os comandos disponiveis:\n'\
+              '/develop funções dev\n' \
               '/finance funções financeira\n' \
-              '/news funções noticias\n' \
               '/others funções utilitarias'
 
     def __init__(self):
@@ -48,6 +49,7 @@ class Bot(object):
         self.finance = Finance()
         self.develop = Develop()
         self.others = Others()
+        self.callback = Callback()
         self.unknown = Unknow()
 
     def run(self):
@@ -60,15 +62,16 @@ class Bot(object):
 
         # Comando finance
         finance_handler = CommandHandler('finance', self.finance.finance)
-        finance_callback = CallbackQueryHandler(self.finance.button)
 
         # Comando develop
         develop_handler = CommandHandler('develop', self.develop.develop)
-        develop_callback = CallbackQueryHandler(self.develop.button)
 
         # Comandos do others
         others_handler = CommandHandler('others', self.others.others)
         url_handler = CommandHandler('url', self.others.url)
+
+        # Comandos Callbacks
+        callback_handler = CallbackQueryHandler(self.callback.button)
 
         # Comandos unknown
         unknown_handler = MessageHandler(Filters.command, self.unknown.unknow)
@@ -78,15 +81,16 @@ class Bot(object):
 
         # Dispatchers da finances
         self.dispatcher.add_handler(finance_handler)
-        self.dispatcher.add_handler(finance_callback)
 
         # Dispatchers da develop
         self.dispatcher.add_handler(develop_handler)
-        self.dispatcher.add_handler(develop_callback)
 
         # Dispatchers da others
         self.dispatcher.add_handler(others_handler)
         self.dispatcher.add_handler(url_handler)
+
+        # Dispatchers callbacks
+        self.dispatcher.add_handler(callback_handler)
 
         # Dispatchers do unknown
         self.dispatcher.add_handler(unknown_handler)
